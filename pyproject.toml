@@ -1,0 +1,20 @@
+[project]
+name = "ather"
+version = "0.1.0"
+requires-python = ">=3.14"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "pyright>=1.1.414",
+    "pytest>=9.2.0",
+    "pytest-playwright>=0.10.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "--browser-channel chrome"   # uses the Google Chrome already installed; no browser download
+
+[tool.pyright]
+include = ["giovanni_to_regions.py", "collect_giovanni.py", "tests"]

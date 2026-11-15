@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="data:,">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How our data and statistics work</title>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#10233F;--ink-2:#3B4A60;--muted:#5F6E84;--line:#D9E1EC;--tint:#F1F5FA;--up:#eb6834;--down:#2a78d6;--amber:#8A5A00;--amber-bg:#FFF6DF}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--ink);font:17px/1.55 "Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif}
+header,main{padding:0 32px}
+header{padding-top:24px;padding-bottom:8px}
+h1{font-size:30px;margin:0 0 6px;letter-spacing:-.01em}
+h2{font-size:22px;margin:0 0 10px;text-wrap:balance}
+h3{font-size:17px;margin:18px 0 6px}
+p{margin:0 0 10px;max-width:85ch}
+ul,ol{margin:0 0 10px;padding-left:22px;max-width:85ch}
+li{margin-bottom:4px}
+code{font:15px ui-monospace,Menlo,Consolas,monospace;background:var(--tint);padding:1px 5px;border-radius:4px}
+.lead{color:var(--ink-2);font-size:18px}
+nav{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:15px;padding:10px 0 4px}
+nav a{color:var(--ink)}
+section{border-top:1px solid var(--line);padding:26px 0}
+.q{display:inline-block;background:var(--ink);color:#fff;border-radius:6px;padding:1px 9px;font-size:14px;font-weight:700;margin-right:8px;vertical-align:3px}
+.short{background:var(--tint);border-left:4px solid var(--ink);padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:12px;max-width:85ch}
+.warn{background:var(--amber-bg);border-left:4px solid var(--amber);color:#4E3500;padding:10px 14px;border-radius:0 8px 8px 0;margin:10px 0;max-width:85ch}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:14px 0;padding:0;list-style:none;counter-reset:s;max-width:none}
+.flow li{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:0;counter-increment:s;font-size:15.5px}
+.flow li::before{content:counter(s);display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--ink);color:#fff;font-weight:700;font-size:14px;margin-bottom:6px}
+.flow b{display:block;font-size:17px}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:15.5px;margin:8px 0 12px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--tint);font-size:14px}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.eg{border:1px dashed #9DB2C9;border-radius:10px;padding:12px 14px;margin:10px 0;max-width:85ch}
+.eg b:first-child{color:var(--ink-2)}
+dl{display:grid;grid-template-columns:minmax(150px,220px) 1fr;gap:8px 18px;margin:0;max-width:110ch}
+dt{font-weight:700}dd{margin:0}
+@media (max-width:700px){header,main{padding-left:16px;padding-right:16px}dl{grid-template-columns:1fr;gap:2px}dd{margin-bottom:10px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>How our data and statistics work</h1>
+  <p class="lead">Question-by-question answers for the team. Plain language, no Earth-science background needed. Updated 14 Nov 2026 after the real data was loaded, and matched against the code in <code>stats.js</code> and <code>giovanni_to_regions.py</code>.</p>
+  <nav aria-label="Questions">
+    <a href="#q1">1 Region-wise?</a><a href="#q2">2 Workflow</a><a href="#q3">3 Which data</a><a href="#q4">4 Averaging</a>
+    <a href="#q5">5 Trend</a><a href="#q6">6 p-value</a><a href="#q7">7 False alarms</a><a href="#q8">8 Other cases</a>
+    <a href="#q9">9 Question box</a><a href="#q10">10 What is not done</a><a href="#gloss">Glossary</a>
+  </nav>
+</header>
+<main>
+
+<section id="q1">
+  <h2><span class="q">Q1</span>Are we taking region-wise data?</h2>
+  <div class="short"><b>Yes.</b> Every number in the app belongs to one region. We never analyse single map pixels.</div>
+  <p>A region is a rectangle on the map, set by four numbers: south, west, north and east edge (latitude and longitude). We have <b>9 named regions</b> (Wisconsin, Central Valley of California, Southern Amazon, Sahel, Indo-Gangetic Plain, Pune, Iberia, Western Cape, Southeast Australia) plus one called <b>"Entire world"</b>.</p>
+  <p>For each region and each measurement we store <b>one number per month</b>. So "Wisconsin, air haze" is simply a list of about 288 monthly numbers (2002 to 2025). In total: 49 such lists, all real NASA data.</p>
+  <p>Why regions and not the whole globe: the challenge says "most trends… will not be global". Also, a region list is small enough to download by hand in one day.</p>
+</section>
+
+<section id="q2">
+  <h2><span class="q">Q2</span>How does the whole thing work, start to finish?</h2>
+  <ol class="flow">
+    <li><b>NASA measures</b>Satellites and NASA models record a value for every small square of the Earth, every month.</li>
+    <li><b>Giovanni averages the region</b>On NASA's Giovanni website we draw the region box. Giovanni returns one average value per month as a CSV file.</li>
+    <li><b>We save the CSV</b>One file per region and measurement, named like <code>wisconsin__aod.csv</code>. 49 files, downloaded on 14 Nov 2026. A helper, <code>collect_giovanni.py</code>, names them from the region box inside each file.</li>
+    <li><b>Our script packs them</b><code>giovanni_to_regions.py</code> reads all files, fixes units, marks missing months, and writes one file: <code>data/regions.json</code>.</li>
+    <li><b>The web page loads it</b>The page reads <code>regions.json</code> once. After that, everything is calculated in the browser. No server.</li>
+    <li><b>User picks What, Where, When</b>Measurement, region, start and end year, and whole year or one season.</li>
+    <li><b>Months become years</b>The chosen months of each year are averaged into one value per year.</li>
+    <li><b>Trend and tests</b>We fit a straight line, measure how sure we are (p-value), and double-check with the Mann-Kendall test.</li>
+    <li><b>Answer in plain words</b>"Rising / likely rising / no clear trend" (same for falling), how fast, how sure, the chart, the seasons, similar places and likely causes.</li>
+  </ol>
+  <p>Steps 1 to 4 happen <b>once, before the demo</b>. Steps 5 to 9 happen <b>live</b>, each time the user changes a choice.</p>
+</section>
+
+<section id="q3">
+  <h2><span class="q">Q3</span>Which data are we using?</h2>
+  <div class="short">Six measurements, all from NASA Giovanni, 2002 to 2025. Five are monthly; groundwater is weekly and we average it to months.</div>
+  <div class="tw"><table>
+    <thead><tr><th>In the app</th><th>What it tells us</th><th>NASA source</th><th>Unit</th><th>Where it applies</th></tr></thead>
+    <tbody>
+      <tr><td>Air haze (<code>aod</code>)</td><td>How much dust, smoke and pollution is in the air</td><td>MODIS instrument on the Aqua satellite</td><td>no unit (0 = clear)</td><td>Everywhere</td></tr>
+      <tr><td>Air temperature (<code>temp</code>)</td><td>Temperature 2 m above the ground</td><td>MERRA-2 (a NASA model fed with observations)</td><td>°C</td><td>Everywhere</td></tr>
+      <tr><td>Rainfall (<code>precip</code>)</td><td>Rain and snow that fell</td><td>GPM IMERG Final Run v07 (satellites)</td><td>mm per month</td><td>Everywhere. Ends Sep 2025</td></tr>
+      <tr><td>Groundwater level (<code>tws</code>)</td><td>How full the groundwater is compared with its own history</td><td>GRACE and GRACE-FO satellites plus a NASA land model (<code>GRACEDADM_CLSM025GL_7D v3.0</code>)</td><td>percentile: 0 = driest on record, 100 = wettest</td><td>Land only. Starts Feb 2003</td></tr>
+      <tr><td>Soil moisture (<code>soil</code>)</td><td>Water in the top 10 cm of soil</td><td>GLDAS (a NASA land model)</td><td>kg per m²</td><td>Land only</td></tr>
+      <tr><td>Sea surface temperature (<code>sst</code>)</td><td>Temperature of the top of the ocean</td><td>MODIS on Aqua (<code>MODISA_L3m_SST_Monthly_9km</code>)</td><td>°C</td><td>Entire world only</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>How each one is used.</b> Each measurement is one choice in the "What" menu. All six together also build the region's "fingerprint", which we use to find similar places (see Q8).</p>
+</section>
+
+<section id="q4">
+  <h2><span class="q">Q4</span>Is the data averaged? How exactly?</h2>
+  <div class="short">Yes, twice. First across <b>space</b> (done by NASA's Giovanni), then across <b>time</b> (done by our page).</div>
+
+  <h3>Averaging 1: across the region (space)</h3>
+  <p>A region contains hundreds of small squares, each with its own value. Giovanni's "Time Series, Area-Averaged" option turns them into <b>one value per month</b> for the whole box. We do not do this step ourselves; we download the result.</p>
+  <p>What this means: a region value is the typical value for the whole box. A hot corner and a cool corner cancel out. That is why small, uniform regions give cleaner answers than huge mixed ones.</p>
+
+  <h3>Averaging 2: months into one value per year (time)</h3>
+  <p>Monthly data goes up and down every year because of the seasons. That yearly wave is much bigger than any slow trend and would hide it. So we turn each year into <b>one number</b>:</p>
+  <ul>
+    <li><b>Whole year:</b> the average of all 12 months.</li>
+    <li><b>One season:</b> the average of its 3 months. Seasons are Dec–Feb, Mar–May, Jun–Aug, Sep–Nov.</li>
+    <li><b>Dec–Feb crosses New Year.</b> December of the previous year is counted with January and February. So "winter 2010" = Dec 2009 + Jan 2010 + Feb 2010.</li>
+    <li><b>Missing month = skip that year.</b> If any needed month has no data, that year is left out, not guessed. Example: Pune air haze has 7 monsoon months with no data (clouds block the satellite), so the Jun–Aug test there has 16 years, not 23. Rainfall ends in September 2025, so 2025 is skipped for whole-year rainfall.</li>
+  </ul>
+  <div class="eg"><b>Example.</b> Wisconsin air haze, summer 2015: June 0.18, July 0.24, August 0.21. Year value = (0.18 + 0.24 + 0.21) ÷ 3 = <b>0.21</b>. Doing this for 2002 to 2025 gives 24 points. Those 24 points are the chart and the input to every test.</div>
+
+  <h3>Unit fixes done by the script</h3>
+  <ul>
+    <li>Temperature in kelvin is changed to °C (minus 273.15). The script detects kelvin when the typical value is above 150.</li>
+    <li>Rainfall in mm per hour is changed to mm per month when we run the script with <code>--precip-mm-per-hour</code>.</li>
+    <li>Weekly groundwater values are averaged into one value per month.</li>
+    <li>Giovanni's "no data" code (for example −9999) becomes an empty value.</li>
+  </ul>
+  <div class="warn"><b>Note on rainfall.</b> For rainfall we also take the <i>average</i> of the months, so the chart shows "average mm per month in that year", not the yearly total. The trend direction and the p-value are the same either way.</div>
+</section>
+
+<section id="q5">
+  <h2><span class="q">Q5</span>How is the trend computed and shown?</h2>
+  <div class="short">We draw the best-fitting straight line through the yearly points. Its steepness is the trend.</div>
+  <ol>
+    <li><b>Straight-line fit</b> (called linear regression or least squares). It finds the line that stays as close as possible to all points.</li>
+    <li><b>Slope</b> = how much the line goes up or down per year. This is the "how much is it changing" answer. Positive = rising, negative = falling. On screen we show it per 10 years, which is easier to read.</li>
+    <li><b>95% confidence interval</b> = a range around the slope. It says "the true rate is very likely between A and B". Computed as slope ± (a table value × the slope's uncertainty). If this range includes zero, we cannot rule out "no change".</li>
+    <li><b>Second estimate (Sen's slope).</b> We take every pair of years, compute the slope between them, and take the middle value. One freak year (a huge wildfire summer) barely moves it. If it agrees with the line fit, the result is solid.</li>
+  </ol>
+  <p><b>On screen:</b> the chart shows the yearly points and the trend line. Next to it: a verdict in words, the rate of change, the confidence range, a p-value meter, and five small tiles (whole year + four seasons) so the user sees which season drives the change.</p>
+</section>
+
+<section id="q6">
+  <h2><span class="q">Q6</span>How is the p-value computed?</h2>
+  <div class="short">The p-value answers one question: <b>"If nothing were really changing, how often would random ups and downs alone produce a slope this steep?"</b> Small p = unlikely to be luck.</div>
+
+  <h3>Test 1: t-test on the slope (this one decides the verdict)</h3>
+  <ol>
+    <li>Compute the slope (Q5).</li>
+    <li>Compute its <b>standard error</b>: how shaky the slope is. Points scattered far from the line, or few years, make it large.</li>
+    <li><b>t = slope ÷ standard error.</b> This is "how many times bigger is the trend than its own uncertainty".</li>
+    <li>Look up t in the Student-t distribution with (number of years − 2) degrees of freedom (fewer after the Q7 correction). That gives the two-sided p-value. "Two-sided" means we count surprises in both directions, up or down.</li>
+    <li><b>Rule: p below 0.05 = "significant".</b> This is the usual scientific cut-off. We run it twice: once plain, and once strict (Q7). That gives three verdicts, below.</li>
+  </ol>
+  <div class="eg"><b>Example.</b> 24 years. Slope = +0.004 per year, standard error = 0.0015. t = 0.004 ÷ 0.0015 = 2.67. With 22 degrees of freedom, p ≈ 0.014. That is below 0.05, so the result is "rising, significant". (The app then applies the stricter check from Q7, which raises p a little.)</div>
+
+  <h3>Three verdict levels</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Verdict</th><th>Meaning</th><th>Real example</th></tr></thead>
+    <tbody>
+      <tr><td><b>Confirmed</b> (filled arrow)</td><td>Passes the strict test. False alarms stay below 5%.</td><td>Southern Amazon groundwater: falling in every season</td></tr>
+      <tr><td><b>Likely, not confirmed</b> (outlined arrow)</td><td>Passes the plain test only. The data moves, but years resemble each other, so the record is too short to rule out chance.</td><td>World air temperature: +0.19 °C per 10 years, plain p = 0.0002, strict p = 0.32</td></tr>
+      <tr><td><b>No clear trend</b> (grey dash)</td><td>Fails both.</td><td>Pune monsoon rain, p = 0.20</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Test 2: Mann-Kendall (second opinion)</h3>
+  <ol>
+    <li>Compare every year with every later year. Later value higher: +1. Lower: −1. Equal: 0.</li>
+    <li>Add them all up. Call the total S. A strongly positive S means "mostly rising".</li>
+    <li>Compare S with what pure chance would give (a formula that depends only on the number of years, with a small fix for repeated equal values). This gives a score Z, and from Z a p-value.</li>
+  </ol>
+  <p>Mann-Kendall only looks at <i>order</i>, not size. So it does not need the data to follow a straight line or a bell curve, and one extreme year cannot fool it. The challenge names both tests; we show both. When they agree, we trust the result more.</p>
+  <p>The p-value maths is written by us in plain JavaScript and self-checks on page load against known textbook values (for example t = 2.228 with 10 degrees of freedom must give p = 0.05).</p>
+</section>
+
+<section id="q7">
+  <h2><span class="q">Q7</span>How do we handle false alarms?</h2>
+  <div class="short">A false alarm is saying "significant trend" when there is none. <b>Our rule: the false alarm rate of a "confirmed" verdict must stay below 5%.</b> The "likely" level is not covered by this rule and says so on screen. We measured it (table below) and tell the user when to be careful.</div>
+  <div class="tw"><table>
+    <thead><tr><th>Risk</th><th>What we do</th></tr></thead>
+    <tbody>
+      <tr><td><b>Pure chance</b></td><td>The 0.05 cut-off is what sets the limit: at most 5 in 100 trend-free series may look significant. We measure this by feeding the real code thousands of random series with no trend. Results are in the table under this one.</td></tr>
+      <tr><td><b>Years that copy each other</b> (autocorrelation)</td><td>A dry year is often followed by another dry year. Then 24 years hold less independent evidence than 24. We measure how much each year resembles the one before (a number r, from −1 to 1) on what is left after removing the line. Short records make r look smaller than it really is, so we use a <b>cautious, higher estimate</b>: r + a small-sample correction + one standard error (1 ÷ √n). Then we shrink the "effective number of years" to n × (1 − r) ÷ (1 + r). This widens the uncertainty and raises the p-value in both tests, every time. Example: 24 years with a cautious r of 0.5 count as only 8.</td></tr>
+      <tr><td><b>Too few years</b></td><td>Fewer than 8 usable years: the app refuses to test and asks for a longer period.</td></tr>
+      <tr><td><b>Lucky start year</b></td><td>A trend can appear only because the period starts in an unusual year. The "Does the starting year matter?" strip repeats the test for each start year and shows whether the verdict stays the same.</td></tr>
+      <tr><td><b>Seasons hiding the trend</b></td><td>We test yearly values, not raw months (Q4), so the yearly seasonal wave cannot hide or fake a trend.</td></tr>
+      <tr><td><b>One extreme year</b></td><td>Mann-Kendall and Sen's slope are less influenced by a single year, but not by a cluster of years at the end. Several unusual years in a row at the end of the record can still create a trend in every test. The start-year strip and the chart itself are the check for that. The app also prints a note when the two slopes disagree.</td></tr>
+      <tr><td><b>Missing data</b></td><td>Incomplete years are skipped, never filled with guesses.</td></tr>
+      <tr><td><b>Repeated equal values</b></td><td>Mann-Kendall includes the standard correction for ties.</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Measured false alarm rate (trend-free random series, run through our own code)</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Years in the record</th><th>Years independent</th><th>Mild resemblance (0.3)</th><th>Strong (0.5)</th><th>Very strong (0.7)</th></tr></thead>
+    <tbody>
+      <tr><td>24 (our full record)</td><td class="num">2.5% / 2.0%</td><td class="num">3.6% / 3.6%</td><td class="num">3.6% / 3.5%</td><td class="num">3.3% / 3.9%</td></tr>
+      <tr><td>16</td><td class="num">2.4% / 2.1%</td><td class="num">4.0% / 3.8%</td><td class="num">4.3% / 4.5%</td><td class="num">5.5% / 5.8%</td></tr>
+      <tr><td>10</td><td class="num">2.6% / 2.5%</td><td class="num">4.5% / 4.2%</td><td class="num">6.4% / 6.2%</td><td class="num">8.6% / 8.2%</td></tr>
+    </tbody>
+  </table></div>
+  <p>Each cell: line fit / Mann-Kendall, 6,000 series each. <b>Below 5% for the full record in every case, and for 16 years or more except very strong resemblance.</b> Short records with strong year-to-year resemblance go above 5%; no simple test can fix that with so few points, so the app should warn on short periods.</p>
+  <p><b>The price.</b> A stricter test misses more real but weak trends. In our trials a moderate real trend over 24 years was found about 75% of the time, against about 92% with no correction. Strong trends are still found almost always.</p>
+  <p><b>What changed on 14 Nov.</b> The earlier version corrected only when r was above 0.3. It passed on independent series (4.5%) but gave 12% to 26% false alarms when years resembled each other. That is now fixed in <code>stats.js</code>.</p>
+
+  <div class="warn"><b>Two honest limits to state on the project page.</b>
+    <ul style="margin:6px 0 0">
+      <li><b>Many tests at once.</b> The "below 5%" rule holds for <i>each single test</i>. One region shows up to 30 tests (6 measurements × 5 season tiles), so about one can still be "significant" by luck. We do not correct for this yet. Treat a lone significant tile as a hint, and trust results that show up in both tests and survive a change of start year.</li>
+      <li><b>Our own autocorrelation fix.</b> It is a cautious version of a textbook correction, not the named Hamed-Rao method. We chose it because we could measure that it keeps false alarms under 5%.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="q8">
+  <h2><span class="q">Q8</span>What other cases does the app handle?</h2>
+  <ul>
+    <li><b>"Not significant" is still an answer.</b> The app says "no clear trend" and shows the range. It does not say "nothing is happening". The challenge asks for this.</li>
+    <li><b>Wrong measurement for the place.</b> A pair with no NASA file (for example sea temperature in Wisconsin, or groundwater for the whole world) shows "nothing to test". It never shows made-up numbers.</li>
+    <li><b>Seasons south of the equator.</b> Dec–Feb is summer in Cape Town and winter in Wisconsin. So the app names seasons by their months ("Dec–Feb", "Jun–Aug"), never "summer" or "winter".</li>
+    <li><b>Similar places.</b> For each region we run the Mann-Kendall test on every measurement and every season. The list of scores (each from −4 to +4) is the region's <b>fingerprint</b>. Two regions are similar when their fingerprints point the same way. We compare land with land and ocean with ocean, need at least 10 shared scores, and show matches of 30% or more.</li>
+    <li><b>Scenario and causes.</b> Taken from what already happened in the similar region, with written notes. These notes are written by us, not computed, and each needs a source link before submission.</li>
+    <li><b>Data file missing.</b> If <code>data/regions.json</code> cannot be loaded, the page shows an error message. There is no sample-data fallback any more.</li>
+  </ul>
+</section>
+
+<section id="q9">
+  <h2><span class="q">Q9</span>Should we remove the "ask a question" box?</h2>
+  <div class="short"><b>Yes. It is removed from the app.</b> Nothing else depended on it.</div>
+  <ul>
+    <li>Your concern is correct. The box only matched keywords. People phrase things in too many ways, and a wrong guess looks worse than no box.</li>
+    <li>The challenge asks for "a short series of questions". Our three menus (What, Where, When) plus the five example buttons already are that.</li>
+    <li>The code is deleted from the app. A copy with the question box is kept outside the project in case the team wants it back.</li>
+    <li>If we revisit it later, the reliable way is an AI model that only fills the three menus, and the user confirms before anything runs. The statistics never depend on it.</li>
+  </ul>
+  <p>The PRD and TRD still list the question box under "Should". That now reads as "parked".</p>
+</section>
+
+<section id="q10">
+  <h2><span class="q">Q10</span>What is done, and what is not?</h2>
+  <p><b>Done and checked.</b> Real NASA data for 10 regions (49 series). All 300 combinations of region, measurement and season were run in a browser with no errors, plus the five example buttons, the map toggle, the start-year strip and the season tiles.</p>
+  <ul>
+    <li><b>Source links</b> for the "what happened" and cause notes are still missing. These notes are background summaries, not results.</li>
+    <li><b>Cross-check against Giovanni:</b> our Wisconsin haze values match the Giovanni CSV (July 2002 = 0.250). A side-by-side picture for the slides is not made yet.</li>
+    <li><b>Hosting</b> is not set up. The page must be opened through a web address, not as a local file.</li>
+    <li><b>PRD and TRD</b> still describe the earlier plan (19 regions, two verdict levels, stored water in cm).</li>
+  </ul>
+</section>
+
+<section id="gloss">
+  <h2>Glossary</h2>
+  <dl>
+    <dt>Region</dt><dd>A rectangle on the map defined by its south, west, north and east edges.</dd>
+    <dt>Area average</dt><dd>One value that stands for the whole region, made from all the small squares inside it.</dd>
+    <dt>Time series</dt><dd>The same measurement repeated over time, in order.</dd>
+    <dt>Giovanni</dt><dd>A NASA website that makes charts and CSV files from NASA data without programming.</dd>
+    <dt>Trend</dt><dd>A slow, lasting rise or fall, as opposed to year-to-year wobble.</dd>
+    <dt>Slope</dt><dd>How much the trend line changes per year.</dd>
+    <dt>Linear regression</dt><dd>The method that finds the best-fitting straight line through points.</dd>
+    <dt>Standard error</dt><dd>How uncertain a computed number (here, the slope) is.</dd>
+    <dt>p-value</dt><dd>The chance of seeing a slope this steep if nothing were really changing. Below 0.05 is called significant.</dd>
+    <dt>Significant</dt><dd>Unlikely to be luck. It does not mean "large" or "important".</dd>
+    <dt>Confidence interval</dt><dd>The range that very likely contains the true rate of change.</dd>
+    <dt>t-test</dt><dd>The test that turns "slope ÷ its uncertainty" into a p-value.</dd>
+    <dt>Mann-Kendall test</dt><dd>A trend test that only counts whether later values are higher or lower than earlier ones.</dd>
+    <dt>Sen's slope</dt><dd>The middle value of the slopes between all pairs of years. Resistant to extreme years.</dd>
+    <dt>Autocorrelation</dt><dd>When each year tends to resemble the year before it.</dd>
+    <dt>False alarm</dt><dd>Reporting a significant trend where none exists.</dd>
+    <dt>Degrees of freedom</dt><dd>Roughly, the number of independent pieces of evidence. Here: years minus 2.</dd>
+    <dt>Percentile</dt><dd>A rank from 0 to 100 against the place's own history. 10 means only 10% of past values were lower.</dd>
+    <dt>Fingerprint</dt><dd>A region's list of trend scores across all measurements and seasons.</dd>
+  </dl>
+</section>
+
+</main>
+</body>
+</html>
