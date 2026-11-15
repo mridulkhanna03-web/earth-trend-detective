@@ -9,10 +9,10 @@ q('toNum').onclick = () => show(tabs[4]);
 q('startRange').oninput = e => { q('y0Sel').value = e.target.value; q('y0Sel').dispatchEvent(new Event('change')); };
 q('csvBtn').onclick = () => { const t = id => q(id).selectedOptions[0].text, V = VARS[q('varSel').value];
   const rows = [...document.querySelectorAll('#dataTable tbody tr')].map(r => [...r.cells].map(c => c.textContent.trim().replace('−', '-')).join(','));
-  const csv = [`# Earth Trend Detective`, `# Measurement: ${t('varSel')}${V.unit ? ' (' + V.unit + ')' : ''}`, `# Region: ${t('regSel')}`, `# Part of year: ${t('seaSel')}`,
+  const csv = [`# AETHER`, `# Measurement: ${t('varSel')}${V.unit ? ' (' + V.unit + ')' : ''}`, `# Region: ${t('regSel')}`, `# Part of year: ${t('seaSel')}`,
     `# Source: NASA Giovanni area average. ${V.src}`, 'year,measured,trend_line', ...rows].join('\n') + '\n';
   const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], {type: 'text/csv'}));
-  a.download = `earth-trend-${q('regSel').value}-${q('varSel').value}-${q('seaSel').value}.csv`; a.click(); URL.revokeObjectURL(a.href); };
+  a.download = `aether-${q('regSel').value}-${q('varSel').value}-${q('seaSel').value}.csv`; a.click(); URL.revokeObjectURL(a.href); };
 // shortcut: label, plain row names and the moved statistics table are derived from what app.js writes; in the final build app.js writes them itself
 const PLAIN = {'Years used (n)':'Years of data used', 'Linear regression slope':'Change per year|slope of the straight-line fit (linear regression)',
   '95% confidence interval of slope, per decade':'Likely range of the change per 10 years|95% confidence interval', 'Linear regression p-value (two-sided t-test)':'Chance this is only luck, main test|p-value, two-sided t-test',
@@ -60,7 +60,7 @@ document.addEventListener('click', e => {
   if (dl === 'csv') q('csvBtn').click();   // same file as the button under "Numbers"
   if (dl === 'png' && Chart.getChart(src)){ const c = Object.assign(document.createElement('canvas'), {width: src.width, height: src.height}), g = c.getContext('2d');
     g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(src, 0, 0);   // white behind the chart, or the image is see-through
-    Object.assign(document.createElement('a'), {href: c.toDataURL('image/png'), download: `earth-trend-${q('regSel').value}-${q('varSel').value}-${q('seaSel').value}.png`}).click(); }
+    Object.assign(document.createElement('a'), {href: c.toDataURL('image/png'), download: `aether-${q('regSel').value}-${q('varSel').value}-${q('seaSel').value}.png`}).click(); }
   // a measurement row or an example changes the answer, so go back to it (season tiles and the slider already sit beside the chart)
   if (e.target.closest('tr[data-set], [data-ex]')) show(tabs[0]);
   setTimeout(grey, 0); });

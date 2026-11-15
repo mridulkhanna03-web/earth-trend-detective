@@ -1,4 +1,4 @@
-# Earth Trend Detective
+# AETHER
 
 Is a place on Earth really changing, or is it just noise?
 

@@ -45,7 +45,7 @@ def label(page):
 
 
 def test_opens_on_real_nasa_data(app):
-    expect(app).to_have_title("Earth Trend Detective")
+    expect(app).to_have_title("AETHER")
     expect(app.locator(".badge2").first).to_have_text("Real NASA data")
     expect(app.locator("#chartTitle .src")).to_have_text("NASA data")
     expect(app.locator("#srcLine")).to_contain_text("Source: NASA Giovanni")
@@ -179,7 +179,7 @@ def test_numbers_tab_and_download(app):
     assert app.locator("#dataTable tr").count() >= 20
     with app.expect_download() as got:
         app.locator("#csvBtn").click()
-    assert got.value.suggested_filename == "earth-trend-wisconsin-aod-JJA.csv"
+    assert got.value.suggested_filename == "aether-wisconsin-aod-JJA.csv"
     lines = Path(got.value.path()).read_text().splitlines()
     assert "year,measured,trend_line" in lines and lines[-1].startswith("2025,0.306,")
     assert any(line.startswith("# Source: NASA Giovanni") for line in lines)
