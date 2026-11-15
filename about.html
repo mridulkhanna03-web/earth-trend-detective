@@ -8,58 +8,122 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="layout.css">
 <style>
-.switch{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;padding:6px 32px;background:var(--ink);color:#fff;font-size:14px}
-.switch a{color:#fff}.switch a[aria-current]{font-weight:700;text-decoration:none;background:#fff;color:var(--ink);border-radius:4px;padding:0 8px}
-header p{max-width:70ch}
-.sel{min-height:46px;padding:0 12px;border:1px solid var(--coast);border-radius:8px;background:#fff;font-weight:700;cursor:pointer;max-width:100%}
-.sel:hover{border-color:var(--ink)}
-.card{border:1px solid var(--line);border-radius:12px;padding:20px}
-.badge2{font-size:13px;font-weight:700;background:var(--ink);color:#fff;border-radius:4px;padding:1px 8px;margin-right:8px}
-.go{min-height:48px;padding:0 22px;border:0;border-radius:10px;background:var(--ink);color:#fff;font-weight:700;font-size:17px}
-.go:hover{background:#1B3A66}
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-@media (max-width:900px){.switch{padding:6px 16px}}
-main{max-width:1320px;margin:0 auto}.deeper:first-child{border-top:0;margin-top:0;padding-top:0}</style>
+/* Built from the app's own classes (.cols, .deeper, .gloss, .two, .vlabel, .card); layout.css gives the shared header and page edges (--gut). */
+.about{padding:22px var(--gut) 48px}
+/* the little this page adds to the shared styles */
+.title{font-size:26px;letter-spacing:-.01em;margin-bottom:4px}
+.intro{color:var(--ink-2);max-width:75ch;margin-bottom:22px}
+.h{font-size:19px;margin-bottom:2px}
+.about .vlabel{font-size:15px;padding:4px 12px}
+.deeper > h2{margin-bottom:16px}
+.tw{overflow-x:auto;max-width:1100px;margin-bottom:30px}
+.h + ul{max-width:75ch}
+.boxed{gap:20px}.boxed h3{margin-bottom:8px}   /* each headed section sits in the app's .card box */
+/* the workflow: a real sequence, so the steps are numbered and joined by a line with an arrowhead */
+.flow{list-style:none;margin:14px 0 10px;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:24px 20px;counter-reset:s}
+.flow li{position:relative;border-top:2px solid var(--ink);padding-top:8px;counter-increment:s;font-size:15px;color:var(--ink-2)}
+.flow li::before{content:counter(s);display:block;font-size:14px;font-weight:700;color:var(--muted)}
+.flow li:not(:last-child)::after{content:"";position:absolute;top:-6px;right:-13px;border:5px solid transparent;border-left:8px solid var(--ink)}
+.flow b{display:block;font-size:16px;color:var(--ink)}
+.flownote{font-size:15px;color:var(--muted)}
+.h + .flow + .flownote{margin-bottom:30px}
+.about th{background:var(--tint)}
+.about td{vertical-align:top;color:var(--ink-2)}.about td b{color:var(--ink)}
+.eg{align-items:start}
+.eg p{color:var(--ink-2);max-width:60ch}.eg p + p{margin-top:10px}.eg b{color:var(--ink)}
+figure{margin:0;min-width:0}
+figcaption{font-size:14px;color:var(--muted);margin-top:4px}
+.chart{display:block;width:100%;height:auto;font-size:13px;fill:var(--ink)}
+.chart text{fill:var(--muted)}
+@media (max-width:700px){.chart{font-size:18px}}   /* the chart shrinks on phones; keep its labels readable */
+</style>
 </head>
 <body>
 <header>
   <div><h1>Earth Trend Detective</h1><p>Is a place on Earth really changing, or is it just noise? Tested on real NASA data, 2002 to 2025.</p></div>
-  <nav aria-label="More"><a href="how_it_works.html">How it works</a><a href="index.html">Back to the app</a></nav>
+  <nav aria-label="More"><a href="index.html">Back to the app</a></nav>
 </header>
 <main>
-  <div>
-    <h2>About this project</h2>
-    <p>Our entry for the NASA Space Apps Challenge 2026, "Be An Earth System Trend Detective!". Every step from NASA file to verdict is explained in <a href="how_it_works.html">How it works</a>.</p>
-    <div class="cols">
-      <section><h3>What we are building</h3><p class="story">A tool that tests whether a place on Earth is really changing, shows how fast and how sure, and then finds similar places, what happened there, and likely causes.</p></section>
-      <section><h3>How it answers the challenge</h3><p class="story">The challenge asks for a tool that selects variables, shows how they change over time, and determines what is changing, where, how much, and whether it is significant. Steps 1 to 3 choose; the chart shows; the answer tests, using a t-test, a confidence interval and the Mann-Kendall test.</p></section>
-      <section><h3>What data it uses</h3><p class="story">Six NASA variables: haze (MODIS), rainfall (GPM IMERG), groundwater (GRACE), sea temperature (MODIS), air temperature (MERRA-2) and soil moisture (GLDAS). They were downloaded from NASA Giovanni in November 2026 as area-averaged series for ten regions and the whole world.</p></section>
-      <section><h3>Limits you should know</h3><p class="story">"Confirmed" means the trend passes a strict test that keeps false alarms below 5% for records of 16 years or more. "Likely" passes only the ordinary test. Each region shows up to 30 tests, so about one can be significant by luck. Short records and a run of unusual years at the end can still mislead. A trend is not a forecast.</p></section>
-      <section><h3>Use of AI</h3><p class="story">The code and documents were written with help from an AI coding assistant (Claude). No AI decides any verdict: every result comes from the statistics shown on screen. The NASA data was downloaded by the team from Giovanni.</p></section>
-      <section><h3>How it is built</h3><p class="story">A static page. NASA series are packed into one file; your browser does every calculation live. The Earth is drawn by the page itself. No server and no account.</p></section>
+<div class="about">
+  <h2 class="title">About this project</h2>
+  <p class="intro">Earth Trend Detective tests whether a place on Earth is really changing, or whether the change could be chance. Our entry for the NASA Space Apps Challenge 2026, "Be An Earth System Trend Detective!". It is a static website: the NASA data is packed into one small file and your browser does every calculation. No server, no account.</p>
+  <h3 class="h">One real answer, explained</h3>
+  <p class="intro">We asked the tool about haze over the Indo-Gangetic Plain in India, 2003 to 2025. This is what it showed.</p>
+  <!-- Real result: stats.js analyze('igp','aod','ALL',2002,2025) on data/regions.json. -->
+  <div class="two eg">
+    <figure>
+      <svg class="chart" viewBox="0 0 520 228" role="img" aria-label="Chart: haze over the Indo-Gangetic Plain, one point per year from 2003 to 2025, rising from about 0.43 to about 0.56 along a dashed trend line.">
+      <line x1="48" x2="504" y1="180.0" y2="180.0" stroke="#EDF1F6"/><text x="40" y="184.0" text-anchor="end">0.40</text>
+      <line x1="48" x2="504" y1="140.0" y2="140.0" stroke="#EDF1F6"/><text x="40" y="144.0" text-anchor="end">0.45</text>
+      <line x1="48" x2="504" y1="100.0" y2="100.0" stroke="#EDF1F6"/><text x="40" y="104.0" text-anchor="end">0.50</text>
+      <line x1="48" x2="504" y1="60.0" y2="60.0" stroke="#EDF1F6"/><text x="40" y="64.0" text-anchor="end">0.55</text>
+      <text x="48.0" y="218" text-anchor="middle">2003</text><text x="193.1" y="218" text-anchor="middle">2010</text><text x="296.7" y="218" text-anchor="middle">2015</text><text x="400.4" y="218" text-anchor="middle">2020</text><text x="504.0" y="218" text-anchor="end">2025</text>
+      <polyline fill="none" stroke="#9DB2C9" stroke-width="1.5" points="48.0,148.0 68.7,124.8 89.5,176.0 110.2,156.0 130.9,153.6 151.6,105.6 172.4,146.4 193.1,122.4 213.8,100.8 234.5,111.2 255.3,112.0 276.0,107.2 296.7,93.6 317.5,78.4 338.2,103.2 358.9,57.6 379.6,59.2 400.4,89.6 421.1,48.8 441.8,56.8 462.5,75.2 483.3,55.2 504.0,89.6"/>
+      <line x1="48.0" y1="153.7" x2="504.0" y2="52.5" stroke="#eb6834" stroke-width="3" stroke-dasharray="8 5"/>
+      <circle cx="48.0" cy="148.0" r="4"/><circle cx="68.7" cy="124.8" r="4"/><circle cx="89.5" cy="176.0" r="4"/><circle cx="110.2" cy="156.0" r="4"/><circle cx="130.9" cy="153.6" r="4"/><circle cx="151.6" cy="105.6" r="4"/><circle cx="172.4" cy="146.4" r="4"/><circle cx="193.1" cy="122.4" r="4"/><circle cx="213.8" cy="100.8" r="4"/><circle cx="234.5" cy="111.2" r="4"/><circle cx="255.3" cy="112.0" r="4"/><circle cx="276.0" cy="107.2" r="4"/><circle cx="296.7" cy="93.6" r="4"/><circle cx="317.5" cy="78.4" r="4"/><circle cx="338.2" cy="103.2" r="4"/><circle cx="358.9" cy="57.6" r="4"/><circle cx="379.6" cy="59.2" r="4"/><circle cx="400.4" cy="89.6" r="4"/><circle cx="421.1" cy="48.8" r="4"/><circle cx="441.8" cy="56.8" r="4"/><circle cx="462.5" cy="75.2" r="4"/><circle cx="483.3" cy="55.2" r="4"/><circle cx="504.0" cy="89.6" r="4"/>
+    </svg>
+      <figcaption>Haze and smoke in the air (aerosol optical depth, no unit), whole-year average. Source: MODIS on the Aqua satellite.</figcaption>
+    </figure>
+    <div>
+      <span class="vlabel" style="--c:var(--up)">RISING<small>confirmed</small></span>
+      <p><b>The line.</b> Each dot is one year. The dashed line is the straight line that fits the dots best. Over 22 years the yearly average rose by 0.126 in total.</p>
+      <p><b>The rate.</b> +0.057 every 10 years. The likely range is +0.041 to +0.074. Zero is not in that range, so "no change" is ruled out.</p>
+      <p><b>The test.</b> If nothing were changing, a line this steep would appear less than 1 time in 1,000 (p-value below 0.001). A second test, Mann-Kendall, agrees. That is why the label says "confirmed".</p>
     </div>
   </div>
-
   <div class="deeper">
-    <h2>Words used on this page</h2>
+    <h2>How an answer is made</h2>
+    <ol class="flow">
+      <li><b>NASA measures</b>Satellites and NASA models record a value for every small square of the Earth, every month.</li>
+      <li><b>One average per region</b>NASA Giovanni averages each region into one value per month.</li>
+      <li><b>One small file</b>We pack six measurements for ten places into one file.</li>
+      <li><b>You choose</b>A measurement, a place, a period, and the whole year or one season.</li>
+      <li><b>One value per year</b>The chosen months of each year are averaged.</li>
+      <li><b>A line and two tests</b>The tool fits a straight line, then tests it with a t-test and the Mann-Kendall test.</li>
+      <li><b>The answer</b>Rising, falling or no clear trend, with how fast and how sure.</li>
+    </ol>
+    <p class="flownote">Steps 1 to 3 are done once, before you open the app. Steps 4 to 7 run each time you change a choice.</p>
+  </div>
+  <div class="deeper">
+    <h2>The four answers you can get</h2>
+    <div class="cols">
+      <section><span class="vlabel" style="--c:var(--up)">RISING<small>confirmed</small></span><p class="story">The trend passes a strict test. A false alarm happens less than 5 times in 100. A falling trend is shown in blue.</p></section>
+      <section><span class="vlabel" style="--c:var(--up)">RISING<small>borderline</small></span><p class="story">The main test confirms the trend, the second test does not.</p></section>
+      <section><span class="vlabel likely" style="--c:var(--up)">RISING<small>likely, not confirmed</small></span><p class="story">The ordinary test finds a trend, the strict test does not.</p></section>
+      <section><span class="vlabel" style="--c:var(--flat)">NO CLEAR TREND</span><p class="story">The ups and downs are too large to tell. This does not prove that nothing is changing.</p></section>
+    </div>
+  </div>
+  <div class="deeper">
+    <h2>More about the tool</h2>
+    <div class="cols boxed">
+        <section class="card"><h3>What else you can do</h3><ul class="clean"><li>Check the answer season by season.</li><li>Try a later starting year.</li><li>See which other places are changing the same way.</li><li>Download the chart or its data.</li></ul></section>
+        <section class="card"><h3>How it answers the challenge</h3><ul class="clean"><li><b>What, where:</b> the three menus and the globe.</li><li><b>Change over time:</b> the chart, one value per year.</li><li><b>How much:</b> the rate of change per 10 years, with its likely range.</li><li><b>Significant or not:</b> a t-test on the trend line and the Mann-Kendall test.</li></ul></section>
+        <section class="card"><h3>The data</h3><ul class="clean"><li>Six NASA measurements: haze and smoke (MODIS), air temperature (MERRA-2), rainfall (GPM IMERG), soil moisture (GLDAS), groundwater (GRACE), sea surface temperature (MODIS).</li><li>Years 2002 to 2025.</li><li>Downloaded from NASA Giovanni on 14 November 2026.</li><li>Averaged over ten places: nine regions and the whole world.</li></ul></section>
+        <section class="card"><h3>Limits</h3><ul class="clean"><li>The 5% promise holds for records of 16 years or more. Shorter periods are less reliable.</li><li>Each place shows up to 30 tests. About one of them can look significant by luck.</li><li>A few unusual years at the end of a record can create a trend. The starting-year slider helps you check.</li><li>A trend is not a forecast, and the lists of common causes are general background, not results.</li></ul></section>
+    </div>
+  </div>
+  <div class="deeper">
+    <h2>Words used in the app</h2>
     <dl class="gloss">
       <div><dt>Time series</dt><dd>The same measurement repeated over time, for example one value per year.</dd></div>
       <div><dt>Trend</dt><dd>A steady rise or fall over many years, beyond the normal ups and downs.</dd></div>
-      <div><dt>Slope</dt><dd>How fast the value changes. Shown per decade (10 years).</dd></div>
-      <div><dt>p-value</dt><dd>The chance of seeing a trend this strong if nothing were really changing. Below 0.05 (5 in 100) is the usual bar for "significant".</dd></div>
-      <div><dt>Significant</dt><dd>Unlikely to be chance. It does not mean large or important. A trend that fails the test can still be real; the record may be too short.</dd></div>
-      <div><dt>Likely range (confidence interval)</dt><dd>The span the true slope most probably lies in (95% sure). If the range includes zero, the trend is not significant.</dd></div>
-      <div><dt>Linear regression</dt><dd>The standard way to fit a straight line through points and get a slope and p-value.</dd></div>
-      <div><dt>Mann-Kendall test</dt><dd>A second trend test that only checks whether later values tend to be higher or lower. One extreme year does not fool it.</dd></div>
-      <div><dt>Sen's slope</dt><dd>A slope estimate that pairs with Mann-Kendall: the middle value of all point-to-point slopes.</dd></div>
-      <div><dt>Aerosol optical depth (AOD)</dt><dd>How much haze, smoke or dust is in the air, measured by how much it dims sunlight. No unit. About 0.1 is clear; above 0.4 is very hazy.</dd></div>
+      <div><dt>Slope</dt><dd>How fast the value changes. Shown per 10 years.</dd></div>
+      <div><dt>p-value</dt><dd>The chance of seeing a trend this strong if nothing were really changing. Below 0.05 (5 in 100) counts as significant.</dd></div>
+      <div><dt>Significant</dt><dd>Unlikely to be chance. It does not mean large or important.</dd></div>
+      <div><dt>Likely range (confidence interval)</dt><dd>The span that very probably holds the true rate of change. If it includes zero, the trend is not significant.</dd></div>
+      <div><dt>Linear regression</dt><dd>The standard way to fit a straight line through points.</dd></div>
+      <div><dt>Mann-Kendall test</dt><dd>A second trend test. It only checks whether later values tend to be higher or lower, so one extreme year does not fool it.</dd></div>
+      <div><dt>Sen's slope</dt><dd>A rate of change that ignores extreme years: the middle value of all year-to-year slopes.</dd></div>
+      <div><dt>Aerosol optical depth (AOD)</dt><dd>How much haze, smoke or dust is in the air. No unit. About 0.1 is clear; above 0.4 is very hazy.</dd></div>
       <div><dt>Groundwater percentile</dt><dd>How full the groundwater is compared with its own history: 0 is the driest on record, 100 the wettest.</dd></div>
-      <div><dt>Similar (analog) place</dt><dd>A different place whose trends look alike. Useful for learning, not for exact forecasts.</dd></div>
-      <div><dt>Scenario</dt><dd>A "what could happen" story based on evidence. Not a forecast.</dd></div>
+      <div><dt>Similar place</dt><dd>A different place whose trends point the same way. Useful for learning, not for forecasts.</dd></div>
+      <div><dt>Scenario</dt><dd>What would happen if the current rate simply continued. Not a forecast.</dd></div>
     </dl>
   </div>
+</div>
 </main>
-<footer>Built for NASA Space Apps Challenge 2026, "Be An Earth System Trend Detective!". Data: NASA Giovanni (GES DISC). NASA does not endorse this project. Region boxes are approximate. The lists of common drivers are general background, not results of this tool. Coastlines: Natural Earth.</footer>
+<footer>Built for NASA Space Apps Challenge 2026, "Be An Earth System Trend Detective!". Data: NASA Giovanni (GES DISC). NASA does not endorse this project. Region boxes are approximate. Coastlines: Natural Earth.</footer>
 </body>
 </html>

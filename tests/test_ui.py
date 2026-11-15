@@ -211,9 +211,13 @@ def test_missing_data_file_shows_error_not_fake_numbers(page: Page, site):
     expect(page.locator("#chart")).to_have_count(0)
 
 
-def test_how_it_works_and_about_pages_open(app):
-    app.get_by_role("link", name="About").first.click()
+def test_about_page_opens_and_how_it_works_is_not_linked(app, site):
+    expect(app.get_by_role("link", name="How it works")).to_have_count(0)      # taken out of the app for now
+    app.get_by_role("link", name="About").click()
     expect(app.locator("h2").first).to_have_text("About this project")
+    expect(app.locator("body")).not_to_contain_text("Use of AI")
+    expect(app.get_by_role("link", name="How it works")).to_have_count(0)
     app.get_by_role("link", name="Back to the app").click()
-    app.get_by_role("link", name="How it works").first.click()
+    expect(verdict(app)).to_be_visible()
+    app.goto(site + "/how_it_works.html")                                      # still there for the team, by direct link
     expect(app.locator("h1")).to_contain_text("How our data and statistics work")

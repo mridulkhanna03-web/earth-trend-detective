@@ -45,14 +45,36 @@ dt{font-weight:700}dd{margin:0}
 <body>
 <header>
   <h1>How our data and statistics work</h1>
-  <p class="lead">Question-by-question answers for the team. Plain language, no Earth-science background needed. Updated 15 Nov 2026 to match the live app (<a href="https://mridulkhanna03-web.github.io/earth-trend-detective/">open it</a>) and the code in <code>stats.js</code> and <code>giovanni_to_regions.py</code>.</p>
+  <p class="lead">Question-by-question answers for the team. Plain language, no Earth-science background needed. Updated 15 Nov 2026 for the new layout (answer beside the Earth, evidence in tabs). It matches the live app (<a href="https://mridulkhanna03-web.github.io/earth-trend-detective/">open it</a>) and the code in <code>stats.js</code> and <code>giovanni_to_regions.py</code>.</p>
   <nav aria-label="Questions">
-    <a href="#q1">1 Region-wise?</a><a href="#q2">2 Workflow</a><a href="#q3">3 Which data</a><a href="#q4">4 Averaging</a>
+    <a href="#tour">The app at a glance</a><a href="#q1">1 Region-wise?</a><a href="#q2">2 Workflow</a><a href="#q3">3 Which data</a><a href="#q4">4 Averaging</a>
     <a href="#q5">5 Trend</a><a href="#q6">6 p-value</a><a href="#q7">7 False alarms</a><a href="#q8">8 Other cases</a>
-    <a href="#q9">9 Question box</a><a href="#q10">10 What is not done</a><a href="#gloss">Glossary</a>
+    <a href="#q9">9 Question box</a><a href="#q10">10 Status and slide material</a><a href="#gloss">Glossary</a>
   </nav>
 </header>
 <main>
+
+<section id="tour">
+  <h2>The app at a glance</h2>
+  <div class="short">One screen, read from top to bottom: <b>choose</b>, <b>answer</b>, <b>evidence</b>.</div>
+  <div class="tw"><table>
+    <thead><tr><th>Part of the screen</th><th>What it shows</th><th>What the visitor can do</th></tr></thead>
+    <tbody>
+      <tr><td><b>1. Choose</b> (top row)</td><td>Three menus: What, Where, When. Five example buttons below them.</td><td>Pick a measurement, a region, the years and the season. Choices with no NASA data are greyed out. One click on an example fills everything in.</td></tr>
+      <tr><td><b>2. The Earth</b> (left)</td><td>A globe with the ten regions as boxes. Orange = confirmed rising, blue = confirmed falling, grey = not confirmed.</td><td>Drag to spin, click a box to choose that region, switch to a flat map.</td></tr>
+      <tr><td><b>3. The answer</b> (right, large)</td><td>A coloured label ("RISING confirmed", "FALLING confirmed", "RISING likely, not confirmed", "RISING borderline: two tests disagree", "NO CLEAR TREND"), one plain sentence, how fast (per 10 years, with its likely range) and how sure (p-value on a bar).</td><td>Read it. Nothing to click.</td></tr>
+      <tr><td><b>4. Evidence tab</b></td><td>The chart (one point per year, dashed trend line, NASA source line), the five season tiles, the starting-year slider, and "What else is changing here".</td><td>Click a season, drag the slider, or click another measurement. The chart and the answer change in place. Download the chart (PNG) or its data (CSV).</td></tr>
+      <tr><td><b>5. Similar places tab</b></td><td>Regions whose trends move the same way, with a match in percent, and what the data shows there. A scenario to 2035 if the trend is confirmed.</td><td>Click a place to open it.</td></tr>
+      <tr><td><b>6. Causes tab</b></td><td>Two clues from the data (strongest season, measurements that moved together) and one general line on common drivers.</td><td>Read it.</td></tr>
+      <tr><td><b>7. Numbers tab</b></td><td>Every yearly value and every test result, each with a plain name and the statistician's name.</td><td>Download the values as CSV.</td></tr>
+    </tbody>
+  </table></div>
+  <p>Each tab shows its own headline under its name, for example "Similar places: Sahel, West Africa (50% match)", so nothing is hidden behind a click.</p>
+  <h3>The starting-year slider</h3>
+  <p>A trend can appear only because the record starts in an unusual year. The slider is a bar of 17 blocks, one per possible starting year (2002 to 2018). Dark blocks give a confirmed trend, white ones do not. Drag the handle and the chart and answer change. A sentence below sums it up, for example: "Confirmed when the record starts in 2002 to 2008, not when it starts in 2009 to 2018. The answer depends on the starting year, so treat it with care."</p>
+  <h3>Other pages</h3>
+  <p><b>About</b> (linked in the app's header): what the tool does, how to read the answer, the data, the limits, and a glossary. <b>This page</b> is not linked from the app; share it by its address.</p>
+</section>
 
 <section id="q1">
   <h2><span class="q">Q1</span>Are we taking region-wise data?</h2>
@@ -73,7 +95,7 @@ dt{font-weight:700}dd{margin:0}
     <li><b>User picks What, Where, When</b>Measurement, region, start and end year, and whole year or one season.</li>
     <li><b>Months become years</b>The chosen months of each year are averaged into one value per year.</li>
     <li><b>Trend and tests</b>We fit a straight line, measure how sure we are (p-value), and double-check with the Mann-Kendall test.</li>
-    <li><b>Answer in plain words</b>"Rising / likely rising / no clear trend" (same for falling), how fast, how sure, the chart, the seasons, similar places and clues about causes.</li>
+    <li><b>Answer in plain words</b>"Rising / likely rising / no clear trend" (same for falling), how fast and how sure. The evidence sits in tabs below: chart, seasons, starting year, similar places, causes, and all the numbers.</li>
   </ol>
   <p>Steps 1 to 4 happen <b>once, before the demo</b>. Steps 5 to 9 happen <b>live</b>, each time the user changes a choice.</p>
 </section>
@@ -132,7 +154,7 @@ dt{font-weight:700}dd{margin:0}
     <li><b>95% confidence interval</b> = a range around the slope. It says "the true rate is very likely between A and B". Computed as slope ± (a table value × the slope's uncertainty). If this range includes zero, we cannot rule out "no change".</li>
     <li><b>Second estimate (Sen's slope).</b> We take every pair of years, compute the slope between them, and take the middle value. One freak year (a huge wildfire summer) barely moves it. If it agrees with the line fit, the result is solid.</li>
   </ol>
-  <p><b>On screen:</b> the chart shows the yearly points and the trend line. Next to it: a verdict in words, the rate of change, the confidence range, a p-value meter, and five small tiles (whole year + four seasons) so the user sees which season drives the change.</p>
+  <p><b>On screen:</b> the answer sits beside the globe: a coloured label, one sentence, the rate of change per 10 years with its likely range, and the p-value on a bar. The chart with the yearly points and the trend line is in the Evidence tab, with five season tiles so the visitor sees which season drives the change.</p>
 </section>
 
 <section id="q6">
@@ -149,11 +171,12 @@ dt{font-weight:700}dd{margin:0}
   </ol>
   <div class="eg"><b>Example.</b> 24 years. Slope = +0.004 per year, standard error = 0.0015. t = 0.004 ÷ 0.0015 = 2.67. With 22 degrees of freedom, p ≈ 0.014. That is below 0.05, so the result is "rising, significant". (The app then applies the stricter check from Q7, which raises p a little.)</div>
 
-  <h3>Three verdict levels</h3>
+  <h3>The verdict levels</h3>
   <div class="tw"><table>
     <thead><tr><th>Verdict</th><th>Meaning</th><th>Real example</th></tr></thead>
     <tbody>
       <tr><td><b>Confirmed</b> (filled arrow)</td><td>Passes the strict test. False alarms stay below 5%.</td><td>Southern Amazon groundwater: falling in every season</td></tr>
+      <tr><td><b>Borderline</b> (label "borderline: two tests disagree")</td><td>The main test confirms the trend but Mann-Kendall does not. The headline says "only one of our two tests confirms it".</td><td>Wisconsin summer haze: p = 0.047, Mann-Kendall p = 0.245</td></tr>
       <tr><td><b>Likely, not confirmed</b> (outlined arrow)</td><td>Passes the plain test only. The data moves, but years resemble each other, so the record is too short to rule out chance.</td><td>World air temperature: +0.19 °C per 10 years, plain p = 0.0002, strict p = 0.32</td></tr>
       <tr><td><b>No clear trend</b> (grey dash)</td><td>Fails both.</td><td>Pune monsoon rain, p = 0.20</td></tr>
     </tbody>
@@ -178,9 +201,9 @@ dt{font-weight:700}dd{margin:0}
       <tr><td><b>Pure chance</b></td><td>The 0.05 cut-off is what sets the limit: at most 5 in 100 trend-free series may look significant. We measure this by feeding the real code thousands of random series with no trend. Results are in the table under this one.</td></tr>
       <tr><td><b>Years that copy each other</b> (autocorrelation)</td><td>A dry year is often followed by another dry year. Then 24 years hold less independent evidence than 24. We measure how much each year resembles the one before (a number r, from −1 to 1) on what is left after removing the line. Short records make r look smaller than it really is, so we use a <b>cautious, higher estimate</b>: r + a small-sample correction + one standard error (1 ÷ √n). Then we shrink the "effective number of years" to n × (1 − r) ÷ (1 + r). This widens the uncertainty and raises the p-value in both tests, every time. Example: 24 years with a cautious r of 0.5 count as only 8.</td></tr>
       <tr><td><b>Too few years</b></td><td>Fewer than 8 usable years: the app refuses to test and asks for a longer period.</td></tr>
-      <tr><td><b>Lucky start year</b></td><td>A trend can appear only because the period starts in an unusual year. The "Does the starting year matter?" strip repeats the test for each start year and shows whether the verdict stays the same.</td></tr>
+      <tr><td><b>Lucky start year</b></td><td>A trend can appear only because the period starts in an unusual year. The starting-year slider in the Evidence tab repeats the test for each start year and says in one sentence whether the verdict stays the same.</td></tr>
       <tr><td><b>Seasons hiding the trend</b></td><td>We test yearly values, not raw months (Q4), so the yearly seasonal wave cannot hide or fake a trend.</td></tr>
-      <tr><td><b>One extreme year</b></td><td>Mann-Kendall and Sen's slope are less influenced by a single year, but not by a cluster of years at the end. Several unusual years in a row at the end of the record can still create a trend in every test. The start-year strip and the chart itself are the check for that. The app also prints a note when the two slopes disagree.</td></tr>
+      <tr><td><b>One extreme year</b></td><td>Mann-Kendall and Sen's slope are less influenced by a single year, but not by a cluster of years at the end. Several unusual years in a row at the end of the record can still create a trend in every test. The starting-year slider and the chart itself are the check for that. The app also prints a note when the two slopes disagree.</td></tr>
       <tr><td><b>Missing data</b></td><td>Incomplete years are skipped, never filled with guesses.</td></tr>
       <tr><td><b>Repeated equal values</b></td><td>Mann-Kendall includes the standard correction for ties.</td></tr>
     </tbody>
@@ -210,7 +233,7 @@ dt{font-weight:700}dd{margin:0}
   <h2><span class="q">Q8</span>What other cases does the app handle?</h2>
   <ul>
     <li><b>"Not significant" is still an answer.</b> The app says "no clear trend" and shows the range. It does not say "nothing is happening". The challenge asks for this.</li>
-    <li><b>Wrong measurement for the place.</b> A pair with no NASA file (for example sea temperature in Wisconsin, or groundwater for the whole world) shows "nothing to test". It never shows made-up numbers.</li>
+    <li><b>Wrong measurement for the place.</b> A pair with no NASA file (for example sea temperature in Wisconsin, or groundwater for the whole world) is greyed out in the menu as "no data here". It never shows made-up numbers.</li>
     <li><b>Seasons south of the equator.</b> Dec–Feb is summer in Cape Town and winter in Wisconsin. So the app names seasons by their months ("Dec–Feb", "Jun–Aug"), never "summer" or "winter".</li>
     <li><b>Similar places.</b> For each region we run the Mann-Kendall test on every measurement and every season. The list of scores (each from −4 to +4) is the region's <b>fingerprint</b>. Two regions are similar when their fingerprints point the same way. We compare land with land and ocean with ocean, need at least 10 shared scores, and show matches of 30% or more.</li>
     <li><b>What this could lead to.</b> If the trend is confirmed, the app extends the line to 2035, clearly marked "a scenario, not a prediction". The value never leaves the measurement's scale (a percentile stays between 0 and 100). Below it, each similar region lists its own confirmed and likely trends. All of this is computed from the NASA data.</li>
@@ -232,26 +255,35 @@ dt{font-weight:700}dd{margin:0}
 </section>
 
 <section id="q10">
-  <h2><span class="q">Q10</span>What is done, and what is not?</h2>
+  <h2><span class="q">Q10</span>Status, and material for the slides</h2>
   <h3>Done</h3>
   <ul>
     <li><b>Live app:</b> <a href="https://mridulkhanna03-web.github.io/earth-trend-detective/">mridulkhanna03-web.github.io/earth-trend-detective</a>. Code: <a href="https://github.com/mridulkhanna03-web/earth-trend-detective">GitHub repository</a>.</li>
     <li><b>Real NASA data</b> for 10 regions, 49 series. No sample data anywhere.</li>
-    <li><b>Code:</b> <code>index.html</code> (page), <code>styles.css</code> and <code>layout.css</code>, <code>stats.js</code> (all statistics), <code>app.js</code> (menus, globe, chart) and <code>layout.js</code> (tabs, slider, downloads). No server.</li>
-    <li><b>Tests:</b> 12 for the statistics, 10 for the data converter, 18 in a real browser. The browser tests also pass against the live link.</li>
+    <li><b>Code:</b> <code>index.html</code> (page), <code>styles.css</code> and <code>layout.css</code>, <code>stats.js</code> (all statistics), <code>app.js</code> (menus, globe, chart) and <code>layout.js</code> (tabs, slider, downloads), <code>about.html</code>. No server.</li>
+    <li><b>Tests:</b> 12 for the statistics, 10 for the data converter, 21 in a real browser (examples, menus, slider, tabs, downloads, phone width).</li>
     <li><b>Cross-check against Giovanni:</b> our Wisconsin haze values match the Giovanni file (July 2002 = 0.250).</li>
   </ul>
   <h3>Results worth showing on the slides</h3>
   <div class="tw"><table>
     <thead><tr><th>Example button</th><th>Verdict</th><th>Numbers (2002 to 2025)</th></tr></thead>
     <tbody>
-      <tr><td>Smoke summers over Wisconsin</td><td>Confirmed rising, Jun–Aug only</td><td>+0.041 per 10 years, p = 0.047. Mann-Kendall disagrees (p = 0.245): a few extreme smoke summers, not a steady climb.</td></tr>
+      <tr><td>Smoke summers over Wisconsin</td><td>Rising, borderline (two tests disagree), Jun–Aug only</td><td>+0.041 per 10 years, p = 0.047. Mann-Kendall disagrees (p = 0.245): a few extreme smoke summers, not a steady climb.</td></tr>
       <tr><td>Amazon groundwater is falling</td><td>Confirmed falling, every season</td><td>Temperature also rising and soil moisture falling there.</td></tr>
       <tr><td>Hazier air over north India</td><td>Confirmed rising</td><td>All year and three of four seasons; not in the monsoon months.</td></tr>
       <tr><td>Is the whole world warming?</td><td>Likely rising, not confirmed</td><td>+0.19 °C per 10 years. Plain p = 0.0002, strict p = 0.32, because yearly values resemble each other strongly.</td></tr>
       <tr><td>Pune monsoon rain</td><td>No clear trend</td><td>p = 0.20. A "no" is also an answer.</td></tr>
     </tbody>
   </table></div>
+  <h3>Points the slides can make</h3>
+  <ul>
+    <li><b>It is a tool, not a report.</b> Any of 49 real NASA series can be tested, with the period and season the visitor chooses.</li>
+    <li><b>It answers in words first.</b> Label, sentence, rate, certainty. The statistics are one tab away, with plain names.</li>
+    <li><b>It is honest.</b> Five verdict labels instead of yes or no; false alarms measured below 5%; a "no clear trend" is shown as a result; limits are listed on the About page.</li>
+    <li><b>It lets you attack its own answer.</b> Season tiles and the starting-year slider show when a result is fragile.</li>
+    <li><b>It goes one step further than the challenge asks.</b> Similar places, computed from the trends of all six measurements.</li>
+    <li><b>It is checkable.</b> Every chart names its NASA product, the values download as CSV, and the Giovanni files are in the repository.</li>
+  </ul>
   <h3>Not done</h3>
   <ul>
     <li><b>Slides.</b> A side-by-side picture of our Wisconsin chart and Giovanni's plot is not made yet.</li>
