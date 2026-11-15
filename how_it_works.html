@@ -45,7 +45,7 @@ dt{font-weight:700}dd{margin:0}
 <body>
 <header>
   <h1>How our data and statistics work</h1>
-  <p class="lead">Question-by-question answers for the team. Plain language, no Earth-science background needed. Updated 14 Nov 2026 after the real data was loaded, and matched against the code in <code>stats.js</code> and <code>giovanni_to_regions.py</code>.</p>
+  <p class="lead">Question-by-question answers for the team. Plain language, no Earth-science background needed. Updated 15 Nov 2026 to match the live app (<a href="https://mridulkhanna03-web.github.io/earth-trend-detective/">open it</a>) and the code in <code>stats.js</code> and <code>giovanni_to_regions.py</code>.</p>
   <nav aria-label="Questions">
     <a href="#q1">1 Region-wise?</a><a href="#q2">2 Workflow</a><a href="#q3">3 Which data</a><a href="#q4">4 Averaging</a>
     <a href="#q5">5 Trend</a><a href="#q6">6 p-value</a><a href="#q7">7 False alarms</a><a href="#q8">8 Other cases</a>
@@ -73,7 +73,7 @@ dt{font-weight:700}dd{margin:0}
     <li><b>User picks What, Where, When</b>Measurement, region, start and end year, and whole year or one season.</li>
     <li><b>Months become years</b>The chosen months of each year are averaged into one value per year.</li>
     <li><b>Trend and tests</b>We fit a straight line, measure how sure we are (p-value), and double-check with the Mann-Kendall test.</li>
-    <li><b>Answer in plain words</b>"Rising / likely rising / no clear trend" (same for falling), how fast, how sure, the chart, the seasons, similar places and likely causes.</li>
+    <li><b>Answer in plain words</b>"Rising / likely rising / no clear trend" (same for falling), how fast, how sure, the chart, the seasons, similar places and clues about causes.</li>
   </ol>
   <p>Steps 1 to 4 happen <b>once, before the demo</b>. Steps 5 to 9 happen <b>live</b>, each time the user changes a choice.</p>
 </section>
@@ -213,7 +213,8 @@ dt{font-weight:700}dd{margin:0}
     <li><b>Wrong measurement for the place.</b> A pair with no NASA file (for example sea temperature in Wisconsin, or groundwater for the whole world) shows "nothing to test". It never shows made-up numbers.</li>
     <li><b>Seasons south of the equator.</b> Dec–Feb is summer in Cape Town and winter in Wisconsin. So the app names seasons by their months ("Dec–Feb", "Jun–Aug"), never "summer" or "winter".</li>
     <li><b>Similar places.</b> For each region we run the Mann-Kendall test on every measurement and every season. The list of scores (each from −4 to +4) is the region's <b>fingerprint</b>. Two regions are similar when their fingerprints point the same way. We compare land with land and ocean with ocean, need at least 10 shared scores, and show matches of 30% or more.</li>
-    <li><b>Scenario and causes.</b> Taken from what already happened in the similar region, with written notes. These notes are written by us, not computed, and each needs a source link before submission.</li>
+    <li><b>What this could lead to.</b> If the trend is confirmed, the app extends the line to 2035, clearly marked "a scenario, not a prediction". The value never leaves the measurement's scale (a percentile stays between 0 and 100). Below it, each similar region lists its own confirmed and likely trends. All of this is computed from the NASA data.</li>
+    <li><b>Likely causes.</b> Two clues are computed: the season where the change is strongest, and which other measurements moved with it. One general line names common drivers of that kind of change. That line is background knowledge, not a result. We removed all region-specific stories because they had no sources.</li>
     <li><b>Data file missing.</b> If <code>data/regions.json</code> cannot be loaded, the page shows an error message. There is no sample-data fallback any more.</li>
   </ul>
 </section>
@@ -224,20 +225,38 @@ dt{font-weight:700}dd{margin:0}
   <ul>
     <li>Your concern is correct. The box only matched keywords. People phrase things in too many ways, and a wrong guess looks worse than no box.</li>
     <li>The challenge asks for "a short series of questions". Our three menus (What, Where, When) plus the five example buttons already are that.</li>
-    <li>The code is deleted from the app. A copy with the question box is kept outside the project in case the team wants it back.</li>
+    <li>The code is deleted from the app.</li>
     <li>If we revisit it later, the reliable way is an AI model that only fills the three menus, and the user confirms before anything runs. The statistics never depend on it.</li>
   </ul>
-  <p>The PRD and TRD still list the question box under "Should". That now reads as "parked".</p>
+
 </section>
 
 <section id="q10">
   <h2><span class="q">Q10</span>What is done, and what is not?</h2>
-  <p><b>Done and checked.</b> Real NASA data for 10 regions (49 series). All 300 combinations of region, measurement and season were run in a browser with no errors, plus the five example buttons, the map toggle, the start-year strip and the season tiles.</p>
+  <h3>Done</h3>
   <ul>
-    <li><b>Source links</b> for the "what happened" and cause notes are still missing. These notes are background summaries, not results.</li>
-    <li><b>Cross-check against Giovanni:</b> our Wisconsin haze values match the Giovanni CSV (July 2002 = 0.250). A side-by-side picture for the slides is not made yet.</li>
-    <li><b>Hosting</b> is not set up. The page must be opened through a web address, not as a local file.</li>
-    <li><b>PRD and TRD</b> still describe the earlier plan (19 regions, two verdict levels, stored water in cm).</li>
+    <li><b>Live app:</b> <a href="https://mridulkhanna03-web.github.io/earth-trend-detective/">mridulkhanna03-web.github.io/earth-trend-detective</a>. Code: <a href="https://github.com/mridulkhanna03-web/earth-trend-detective">GitHub repository</a>.</li>
+    <li><b>Real NASA data</b> for 10 regions, 49 series. No sample data anywhere.</li>
+    <li><b>Code:</b> <code>index.html</code> (page), <code>styles.css</code> and <code>layout.css</code>, <code>stats.js</code> (all statistics), <code>app.js</code> (menus, globe, chart) and <code>layout.js</code> (tabs, slider, downloads). No server.</li>
+    <li><b>Tests:</b> 12 for the statistics, 10 for the data converter, 18 in a real browser. The browser tests also pass against the live link.</li>
+    <li><b>Cross-check against Giovanni:</b> our Wisconsin haze values match the Giovanni file (July 2002 = 0.250).</li>
+  </ul>
+  <h3>Results worth showing on the slides</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Example button</th><th>Verdict</th><th>Numbers (2002 to 2025)</th></tr></thead>
+    <tbody>
+      <tr><td>Smoke summers over Wisconsin</td><td>Confirmed rising, Jun–Aug only</td><td>+0.041 per 10 years, p = 0.047. Mann-Kendall disagrees (p = 0.245): a few extreme smoke summers, not a steady climb.</td></tr>
+      <tr><td>Amazon groundwater is falling</td><td>Confirmed falling, every season</td><td>Temperature also rising and soil moisture falling there.</td></tr>
+      <tr><td>Hazier air over north India</td><td>Confirmed rising</td><td>All year and three of four seasons; not in the monsoon months.</td></tr>
+      <tr><td>Is the whole world warming?</td><td>Likely rising, not confirmed</td><td>+0.19 °C per 10 years. Plain p = 0.0002, strict p = 0.32, because yearly values resemble each other strongly.</td></tr>
+      <tr><td>Pune monsoon rain</td><td>No clear trend</td><td>p = 0.20. A "no" is also an answer.</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Not done</h3>
+  <ul>
+    <li><b>Slides.</b> A side-by-side picture of our Wisconsin chart and Giovanni's plot is not made yet.</li>
+    <li><b>Submission rules for 2026</b> (deadline, slide format, AI disclosure, licence) are not checked.</li>
+    <li><b>The older PRD and TRD documents</b> describe an earlier plan and are not published. Use this page instead.</li>
   </ul>
 </section>
 

@@ -8,26 +8,21 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="layout.css">
 </head>
 <body>
 
 <header>
   <div>
     <h1>Earth Trend Detective</h1>
-    <p>Is a place really changing, or is it just noise? Pick a measurement and a place, test the trend, then see who else is on the same path.</p>
+    <p>Is a place on Earth really changing, or is it just noise? Tested on real NASA data, 2002 to 2025.</p>
   </div>
-  <nav aria-label="More"><a href="how_it_works.html">How it works</a><a href="#about">About</a></nav>
+  <nav aria-label="More"><a href="how_it_works.html">How it works</a><a href="about.html">About</a></nav>
 </header>
 
-<div class="sample" role="note"><b class="badge">Real NASA data</b><span>Monthly measurements from NASA Giovanni, 2002 to 2025, averaged over each region. Every statistic is calculated live in your browser.</span></div>
-
-<div class="examples" id="examples"><span>Try an example:</span></div>
-
 <main>
-  <div class="stage">
-
-    <section class="earth" aria-label="Earth">
-      <div class="globewrap">
+  <div class="top">
+    <section aria-label="Earth">      <div class="globewrap">
         <svg id="globe" viewBox="0 0 600 600" role="img" aria-label="Globe showing regions coloured by trend. Use the Where list to choose a region with the keyboard."></svg>
         <div class="tipbox" id="tipbox" hidden></div>
       </div>
@@ -45,82 +40,68 @@
         <span><i style="border:1.5px dashed var(--coast)"></i>Not measured here</span>
         <span><i style="background:var(--ink);border-radius:50%"></i>Similar place (numbered)</span>
       </div>
-      <p class="note" id="mapNote" hidden>Coastlines could not be loaded (no internet). Regions still work.</p>
-    </section>
-
-    <section class="ask" aria-label="Your question and the time series">
-      <h2>Choose step by step</h2>
+      <p class="note" id="mapNote" hidden>Coastlines could not be loaded (no internet). Regions still work.</p></section>
+    <section aria-label="Your choice">
+      <h2><span class="badge2">Real NASA data</span>Choose what, where and when</h2>
       <div class="fields">
         <label for="varSel"><span class="stepno">1</span>What</label>
         <div><select id="varSel"></select><p class="help" id="varHelp"></p></div>
         <label for="regSel"><span class="stepno">2</span>Where</label>
         <div><select id="regSel"></select></div>
         <label for="y0Sel"><span class="stepno">3</span>When</label>
-        <div class="when">
-          <select id="y0Sel" aria-label="Start year"></select><span>to</span><select id="y1Sel" aria-label="End year"></select>
-          <select id="seaSel" aria-label="Part of the year"></select>
-          <p class="err" id="yrErr" role="alert" hidden>Choose at least 8 years so the test has enough data.</p>
-        </div>
+        <div class="when"><select id="y0Sel" aria-label="Start year"></select><span>to</span><select id="y1Sel" aria-label="End year"></select><select id="seaSel" aria-label="Part of the year"></select><p class="err" id="yrErr" role="alert" hidden>Choose at least 8 years so the test has enough data.</p></div>
       </div>
-
-      <div class="chartblock">
-        <h2>The record, year by year</h2>
-        <p class="help" id="chartTitle"></p>
-        <div class="chartbox"><canvas id="chart" role="img" aria-label="Time series chart with trend line"></canvas><div class="empty" id="chartEmpty" hidden></div></div>
-        <details id="tableWrap"><summary>Show the numbers as a table</summary><div id="dataTable" style="max-height:260px;overflow:auto;margin-top:8px"></div></details>
-      </div>
-    </section>
-
-    <section class="answer" aria-label="Is the trend real">
-      <h2>The answer</h2>
-      <div id="verdict"></div>
-      <p class="sub">Same test for each part of the year</p>
-      <p class="help" style="margin-top:0">Some trends only show in one season. Click one to chart it.</p>
-      <div class="seasons" id="seasons" role="group" aria-label="Trend by season"></div>
+      <div class="examples" id="examples"><span>Try an example:</span></div>
     </section>
   </div>
 
-  <div class="deeper">
-    <h2>What does this mean for <span id="deepName"></span>?</h2>
-    <p>What else is changing here, which places are on a similar path, what happened there, and what may be causing it.</p>
-    <div class="cols">
-      <section><h3>Everything measured here</h3><p class="lead">Same years and season. Click a row to chart it.</p><div id="regTrends"></div></section>
-      <section><h3>Similar places worldwide</h3><p class="lead">Places whose trends move the same way. Numbered on the Earth.</p><div id="analogs"></div></section>
-      <section><h3>What this could lead to</h3><span class="pill">A scenario, not a prediction</span><div id="scenario"></div></section>
-      <section><h3>Likely causes</h3><span class="pill">Leads to follow up, not proof</span><div id="causes"></div></section>
+  <div class="tabs" role="tablist" aria-label="Results">
+    <button type="button" role="tab" id="t1" aria-controls="tp1" aria-selected="true">Answer</button>
+    <button type="button" role="tab" id="t2" aria-controls="tp2" aria-selected="false">All measurements</button>
+    <button type="button" role="tab" id="t3" aria-controls="tp3" aria-selected="false">Similar places</button>
+    <button type="button" role="tab" id="t4" aria-controls="tp4" aria-selected="false">Causes</button>
+    <button type="button" role="tab" id="t5" aria-controls="tp5" aria-selected="false">Numbers</button>
+  </div>
+  <div class="tabpanel result" role="tabpanel" id="tp1" aria-labelledby="t1">
+    <div><div id="verdict"></div><div id="also"></div><button type="button" class="tonum" id="toNum">See all the numbers behind this answer</button></div>
+    <div><div class="charthead"><p class="help" id="chartTitle"></p>
+        <details class="dl"><summary>Download ▾</summary><div><button type="button" data-dl="csv">Data (CSV)</button><button type="button" data-dl="png">Chart (PNG)</button></div></details></div>
+      <div class="chartbox"><canvas id="chart" role="img" aria-label="Time series chart with trend line"></canvas><div class="empty" id="chartEmpty" hidden></div></div>
+      <p class="note" id="srcLine"></p>
+      <div class="under">
+        <h2>Part of the year</h2>
+        <p class="help" style="margin-top:0">The same test for each season. Click one and the chart above changes.</p>
+        <div class="seasons" id="seasons" role="group" aria-label="Trend by season"></div>
+      </div>
+      <div class="under" id="startCtl" hidden>
+        <h2><label for="startRange">Starting year: <output id="startVal" for="startRange"></output></label></h2>
+        <p class="help" style="margin-top:0">Slide to start the record later and watch the chart and the answer change. The colours show which starting years give a confirmed trend.</p>
+        <div class="startbar"><div class="blocks" id="startBlocks" aria-hidden="true"></div><input type="range" id="startRange" step="1"></div>
+        <div class="ends2"><span id="startMin"></span><span id="startMax"></span></div>
+        <p class="finding" id="startFind"></p>
+      </div>
     </div>
   </div>
-
-  <div class="deeper" id="about">
-    <h2>About this project</h2>
-    <p>Our entry for the NASA Space Apps Challenge 2026, "Be An Earth System Trend Detective!". Every step from NASA file to verdict is explained in <a href="how_it_works.html">How it works</a>.</p>
-    <div class="cols">
-      <section><h3>What we are building</h3><p class="story">A tool that tests whether a place on Earth is really changing, shows how fast and how sure, and then finds similar places, what happened there, and likely causes.</p></section>
-      <section><h3>How it answers the challenge</h3><p class="story">The challenge asks for a tool that selects variables, shows how they change over time, and determines what is changing, where, how much, and whether it is significant. Steps 1 to 3 choose; the chart shows; the answer tests, using a t-test, a confidence interval and the Mann-Kendall test.</p></section>
-      <section><h3>What data it uses</h3><p class="story">Six NASA variables: haze (MODIS), rainfall (GPM IMERG), groundwater (GRACE), sea temperature (MODIS), air temperature (MERRA-2) and soil moisture (GLDAS). They were downloaded from NASA Giovanni in November 2026 as area-averaged series for ten regions and the whole world.</p></section>
-      <section><h3>Limits you should know</h3><p class="story">"Confirmed" means the trend passes a strict test that keeps false alarms below 5% for records of 16 years or more. "Likely" passes only the ordinary test. Each region shows up to 30 tests, so about one can be significant by luck. Short records and a run of unusual years at the end can still mislead. A trend is not a forecast.</p></section>
-      <section><h3>Use of AI</h3><p class="story">The code and documents were written with help from an AI coding assistant (Claude). No AI decides any verdict: every result comes from the statistics shown on screen. The NASA data was downloaded by the team from Giovanni.</p></section>
-      <section><h3>How it is built</h3><p class="story">A static page. NASA series are packed into one file; your browser does every calculation live. The Earth is drawn by the page itself. No server and no account.</p></section>
-    </div>
+  <div class="tabpanel" role="tabpanel" id="tp2" aria-labelledby="t2" hidden style="max-width:760px">
+    <h2>Everything measured in <span id="deepName"></span></h2><p class="help" style="margin-top:0">Same years and season as your answer. Click a row to open that measurement under "Answer".</p><div id="regTrends"></div>
   </div>
-
-  <div class="deeper">
-    <h2>Words used on this page</h2>
-    <dl class="gloss">
-      <div><dt>Time series</dt><dd>The same measurement repeated over time, for example one value per year.</dd></div>
-      <div><dt>Trend</dt><dd>A steady rise or fall over many years, beyond the normal ups and downs.</dd></div>
-      <div><dt>Slope</dt><dd>How fast the value changes. Shown per decade (10 years).</dd></div>
-      <div><dt>p-value</dt><dd>The chance of seeing a trend this strong if nothing were really changing. Below 0.05 (5 in 100) is the usual bar for "significant".</dd></div>
-      <div><dt>Significant</dt><dd>Unlikely to be chance. It does not mean large or important. A trend that fails the test can still be real; the record may be too short.</dd></div>
-      <div><dt>Likely range (confidence interval)</dt><dd>The span the true slope most probably lies in (95% sure). If the range includes zero, the trend is not significant.</dd></div>
-      <div><dt>Linear regression</dt><dd>The standard way to fit a straight line through points and get a slope and p-value.</dd></div>
-      <div><dt>Mann-Kendall test</dt><dd>A second trend test that only checks whether later values tend to be higher or lower. One extreme year does not fool it.</dd></div>
-      <div><dt>Sen's slope</dt><dd>A slope estimate that pairs with Mann-Kendall: the middle value of all point-to-point slopes.</dd></div>
-      <div><dt>Aerosol optical depth (AOD)</dt><dd>How much haze, smoke or dust is in the air, measured by how much it dims sunlight. No unit. About 0.1 is clear; above 0.4 is very hazy.</dd></div>
-      <div><dt>Terrestrial water storage</dt><dd>All water on and under land (groundwater, soil water, snow, lakes), measured from space as change from normal, in cm of water.</dd></div>
-      <div><dt>Similar (analog) place</dt><dd>A different place whose trends look alike. Useful for learning, not for exact forecasts.</dd></div>
-      <div><dt>Scenario</dt><dd>A "what could happen" story based on evidence. Not a forecast.</dd></div>
-    </dl>
+  <div class="tabpanel two" role="tabpanel" id="tp3" aria-labelledby="t3" hidden>
+    <div><h2>Places whose trends move the same way</h2><div id="analogs"></div></div>
+    <div><h2>What this could lead to</h2><span class="pill">A scenario, not a prediction</span><div id="scenario"></div></div>
+  </div>
+  <div class="tabpanel" role="tabpanel" id="tp4" aria-labelledby="t4" hidden style="max-width:75ch"><span class="pill">Leads to follow up, not proof</span><div id="causes"></div></div>
+  <div class="tabpanel two" role="tabpanel" id="tp5" aria-labelledby="t5" hidden>
+    <div id="tableWrap">
+      <h2>The values in the chart</h2>
+      <p class="lead">One row per year. "Measured" is the NASA value for that year. "Trend line" is where the straight line sits in that year.</p>
+      <button type="button" class="tonum" id="csvBtn" style="margin:0 0 10px">Download these values (CSV)</button>
+      <div id="dataTable"></div>
+    </div>
+    <div>
+      <h2>The test results</h2>
+      <p class="lead">Every number the answer is based on. The plain name comes first; the name statisticians use is in grey.</p>
+      <div id="statsBox"></div>
+    </div>
   </div>
 </main>
 
@@ -132,6 +113,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="layout.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

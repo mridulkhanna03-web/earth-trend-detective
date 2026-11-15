@@ -1,0 +1,100 @@
+/* Layout of the app page: the answer beside the Earth, the evidence in tabs below. Loaded after styles.css. */
+header p{max-width:70ch}
+.sel{min-height:46px;padding:0 12px;border:1px solid var(--coast);border-radius:8px;background:#fff;font-weight:700;cursor:pointer;max-width:100%}
+.sel:hover{border-color:var(--ink)}
+.card{border:1px solid var(--line);border-radius:12px;padding:20px}
+.badge2{font-size:13px;font-weight:700;background:var(--ink);color:#fff;border-radius:4px;padding:1px 8px;margin-right:8px}
+.go{min-height:48px;padding:0 22px;border:0;border-radius:10px;background:var(--ink);color:#fff;font-weight:700;font-size:17px}
+.go:hover{background:#1B3A66}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* tabs, slider, labels */
+main{max-width:1320px;margin:0 auto}
+.top{display:grid;grid-template-columns:minmax(260px,380px) 1fr;gap:40px;align-items:start}
+.top .legend{font-size:14px;gap:4px 14px}.top .legend span:nth-child(4){display:none}
+.top .fields{max-width:640px}
+.examples{padding:0;margin-top:18px}
+.tabs{display:flex;gap:4px;margin-top:28px;border-bottom:2px solid var(--ink);overflow-x:auto}
+.tabs button{min-height:50px;padding:0 22px;border:0;border-radius:10px 10px 0 0;background:var(--tint);font-weight:700;font-size:17px;white-space:nowrap}
+.tabs button[aria-selected=true]{background:var(--ink);color:#fff}
+.tabpanel{padding-top:24px}
+.result{display:grid;grid-template-columns:minmax(300px,2fr) 3fr;gap:36px;align-items:start}
+.result .chartbox{height:340px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:36px}
+.vlabel{display:inline-block;font-size:15px;font-weight:700;letter-spacing:.04em;border-radius:6px;padding:4px 12px;margin-bottom:10px;border:2px solid var(--c);background:var(--c);color:#fff}
+.vlabel.likely{background:#fff;color:var(--ink)}
+.vlabel small{font-weight:400;letter-spacing:0;font-size:14px;margin-left:6px}
+.verdict h3{font-size:25px}
+.tonum{margin-top:16px;min-height:42px;padding:0 16px;border:1px solid var(--ink);border-radius:8px;background:#fff;font-weight:700}
+.result > div{min-width:0}   /* lets the chart shrink on phones instead of pushing the page sideways */
+.charthead{display:flex;gap:12px;align-items:start;justify-content:space-between}
+.dl{position:relative;flex:none;margin-top:6px}
+.dl summary{list-style:none;min-height:0;padding:3px 10px;border:1px solid var(--coast);border-radius:6px;background:#fff;font-size:14px;text-decoration:none;white-space:nowrap}
+.dl summary::-webkit-details-marker{display:none}
+.dl summary:hover{border-color:var(--ink)}
+.dl div{position:absolute;right:0;top:calc(100% + 4px);z-index:5;min-width:150px;padding:4px;border:1px solid var(--line);border-radius:8px;background:#fff;box-shadow:0 6px 18px rgba(16,35,63,.14)}
+.dl div button{display:block;width:100%;text-align:left;border:0;border-radius:6px;background:none;padding:8px 10px;font-size:15px}
+.dl div button:hover{background:var(--tint)}
+#tp5 h2{font-size:20px;margin-bottom:2px}
+#tp5 .lead{color:var(--ink-2);font-size:15px;margin-bottom:10px;max-width:60ch}
+#tp5 td small{display:block;color:var(--muted);font-size:13px}
+#dataTable{max-height:520px;overflow:auto}
+.also{margin-top:20px;border-top:1px solid var(--line)}
+.also button{display:flex;gap:10px;align-items:baseline;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:none;padding:11px 2px;font-size:16px}
+.also button:hover{background:var(--tint)}
+.also b{flex:none;width:9.5em}.also span{flex:1;color:var(--ink-2)}.also i{font-style:normal;color:var(--muted);font-size:14px;white-space:nowrap}
+.under{margin-top:26px;padding-top:18px;border-top:1px solid var(--line)}
+.under h2{font-size:17px;margin-bottom:2px}
+.under output{font-variant-numeric:tabular-nums}
+.startbar{position:relative;margin-top:12px;height:44px}
+.blocks{position:absolute;inset:14px 0 14px 0;display:flex;gap:2px}
+.blocks i{flex:1;border:1px solid var(--coast);border-radius:2px;background:#fff}
+.blocks .yes{background:var(--ink);border-color:var(--ink)}
+.blocks .maybe{background:repeating-linear-gradient(45deg,var(--ink) 0 2px,#fff 2px 6px);border-color:var(--ink)}
+#startRange{position:absolute;top:0;height:44px;margin:0;background:none;-webkit-appearance:none;appearance:none;cursor:pointer}
+#startRange::-webkit-slider-runnable-track{background:none;height:44px}
+#startRange::-moz-range-track{background:none;height:44px}
+#startRange::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:44px;border-radius:6px;background:rgba(255,255,255,.25);border:3px solid var(--up);box-shadow:0 0 0 2px #fff}
+#startRange::-moz-range-thumb{width:16px;height:38px;border-radius:6px;background:rgba(255,255,255,.25);border:3px solid var(--up);box-shadow:0 0 0 2px #fff}
+.ends2{display:flex;justify-content:space-between;font-size:14px;color:var(--muted)}
+.finding{font-size:16px;background:var(--tint);border-left:4px solid var(--ink);border-radius:0 8px 8px 0;padding:10px 14px;margin-top:10px}
+@media (max-width:900px){.top,.result,.two{grid-template-columns:1fr}}
+
+/* the answer beside the Earth */
+main{max-width:none;padding:0;--gut:16px}
+header,.hero{background:#F1F5FA}
+/* .hero is added by the script below; plain .top would also match the title row of the similar-place cards */
+.hero{--tint:#E2EAF4;padding:12px var(--gut) 36px;gap:24px;grid-template-areas:"ask" "verdict" "earth";border-bottom:1px solid var(--line)}
+.hero > section:nth-child(1){grid-area:earth}.hero > section:nth-child(2){grid-area:ask}
+#verdict{grid-area:verdict;align-self:center;max-width:700px}
+.hero h2{font-size:22px}
+.hero .help{font-size:14px}
+.hero .examples{font-size:14px;gap:6px}.hero .chip{padding:0 11px}
+#globe{filter:drop-shadow(0 10px 22px rgba(16,35,63,.16))}
+/* the answer, large */
+.vlabel{font-size:17px;padding:6px 14px}
+#verdict .verdict h3{font-size:clamp(27px,3.1vw,44px);line-height:1.12;letter-spacing:-.02em}
+#verdict .verdict p{font-size:18px;max-width:60ch}
+#verdict .facts,#verdict .meter{max-width:560px}
+#verdict .facts b{font-size:34px}
+#verdict .note,#verdict .tip{max-width:60ch}
+/* the evidence: each tab carries its own headline, so the three "Open" rows and the extra button are not shown */
+#also,#toNum{display:none}
+.tabs,.tabpanel{margin-inline:var(--gut)}
+.tabs{gap:4px;margin-top:6px;border-bottom:1px solid var(--line)}
+.tabs button,.tabs button[aria-selected=true]{background:none;border-radius:0;border-bottom:4px solid transparent;min-height:64px;padding:8px 18px;text-align:left;color:var(--ink-2)}
+.tabs button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--up)}
+.tabs small{display:block;font-weight:400;font-size:14px;color:var(--muted)}
+.tabs small::first-letter{text-transform:uppercase}
+.tabpanel{padding-bottom:48px}
+.result > div:first-child{order:2}
+#tp1 .under:first-child{margin-top:0;padding-top:0;border-top:0}
+@media (min-width:901px){
+  main{--gut:max(32px,calc(50% - 640px))}
+  header,footer{padding-inline:max(32px,calc(50% - 640px))}
+  .hero{grid-template-columns:minmax(300px,440px) 1fr;grid-template-areas:"ask ask" "earth verdict";gap:24px 56px}
+  .hero .fields{max-width:none;grid-template-columns:1.2fr 1fr 1.7fr;grid-template-rows:auto auto;grid-auto-flow:column;gap:2px 16px}
+  .hero .fields > label{min-height:0;font-size:15px}
+  .result{grid-template-columns:3fr 2fr}
+  .result .chartbox{height:400px}
+}

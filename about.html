@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="data:,">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About Earth Trend Detective</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.switch{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;padding:6px 32px;background:var(--ink);color:#fff;font-size:14px}
+.switch a{color:#fff}.switch a[aria-current]{font-weight:700;text-decoration:none;background:#fff;color:var(--ink);border-radius:4px;padding:0 8px}
+header p{max-width:70ch}
+.sel{min-height:46px;padding:0 12px;border:1px solid var(--coast);border-radius:8px;background:#fff;font-weight:700;cursor:pointer;max-width:100%}
+.sel:hover{border-color:var(--ink)}
+.card{border:1px solid var(--line);border-radius:12px;padding:20px}
+.badge2{font-size:13px;font-weight:700;background:var(--ink);color:#fff;border-radius:4px;padding:1px 8px;margin-right:8px}
+.go{min-height:48px;padding:0 22px;border:0;border-radius:10px;background:var(--ink);color:#fff;font-weight:700;font-size:17px}
+.go:hover{background:#1B3A66}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (max-width:900px){.switch{padding:6px 16px}}
+main{max-width:1320px;margin:0 auto}.deeper:first-child{border-top:0;margin-top:0;padding-top:0}</style>
+</head>
+<body>
+<header>
+  <div><h1>Earth Trend Detective</h1><p>Is a place on Earth really changing, or is it just noise? Tested on real NASA data, 2002 to 2025.</p></div>
+  <nav aria-label="More"><a href="how_it_works.html">How it works</a><a href="index.html">Back to the app</a></nav>
+</header>
+<main>
+  <div>
+    <h2>About this project</h2>
+    <p>Our entry for the NASA Space Apps Challenge 2026, "Be An Earth System Trend Detective!". Every step from NASA file to verdict is explained in <a href="how_it_works.html">How it works</a>.</p>
+    <div class="cols">
+      <section><h3>What we are building</h3><p class="story">A tool that tests whether a place on Earth is really changing, shows how fast and how sure, and then finds similar places, what happened there, and likely causes.</p></section>
+      <section><h3>How it answers the challenge</h3><p class="story">The challenge asks for a tool that selects variables, shows how they change over time, and determines what is changing, where, how much, and whether it is significant. Steps 1 to 3 choose; the chart shows; the answer tests, using a t-test, a confidence interval and the Mann-Kendall test.</p></section>
+      <section><h3>What data it uses</h3><p class="story">Six NASA variables: haze (MODIS), rainfall (GPM IMERG), groundwater (GRACE), sea temperature (MODIS), air temperature (MERRA-2) and soil moisture (GLDAS). They were downloaded from NASA Giovanni in November 2026 as area-averaged series for ten regions and the whole world.</p></section>
+      <section><h3>Limits you should know</h3><p class="story">"Confirmed" means the trend passes a strict test that keeps false alarms below 5% for records of 16 years or more. "Likely" passes only the ordinary test. Each region shows up to 30 tests, so about one can be significant by luck. Short records and a run of unusual years at the end can still mislead. A trend is not a forecast.</p></section>
+      <section><h3>Use of AI</h3><p class="story">The code and documents were written with help from an AI coding assistant (Claude). No AI decides any verdict: every result comes from the statistics shown on screen. The NASA data was downloaded by the team from Giovanni.</p></section>
+      <section><h3>How it is built</h3><p class="story">A static page. NASA series are packed into one file; your browser does every calculation live. The Earth is drawn by the page itself. No server and no account.</p></section>
+    </div>
+  </div>
+
+  <div class="deeper">
+    <h2>Words used on this page</h2>
+    <dl class="gloss">
+      <div><dt>Time series</dt><dd>The same measurement repeated over time, for example one value per year.</dd></div>
+      <div><dt>Trend</dt><dd>A steady rise or fall over many years, beyond the normal ups and downs.</dd></div>
+      <div><dt>Slope</dt><dd>How fast the value changes. Shown per decade (10 years).</dd></div>
+      <div><dt>p-value</dt><dd>The chance of seeing a trend this strong if nothing were really changing. Below 0.05 (5 in 100) is the usual bar for "significant".</dd></div>
+      <div><dt>Significant</dt><dd>Unlikely to be chance. It does not mean large or important. A trend that fails the test can still be real; the record may be too short.</dd></div>
+      <div><dt>Likely range (confidence interval)</dt><dd>The span the true slope most probably lies in (95% sure). If the range includes zero, the trend is not significant.</dd></div>
+      <div><dt>Linear regression</dt><dd>The standard way to fit a straight line through points and get a slope and p-value.</dd></div>
+      <div><dt>Mann-Kendall test</dt><dd>A second trend test that only checks whether later values tend to be higher or lower. One extreme year does not fool it.</dd></div>
+      <div><dt>Sen's slope</dt><dd>A slope estimate that pairs with Mann-Kendall: the middle value of all point-to-point slopes.</dd></div>
+      <div><dt>Aerosol optical depth (AOD)</dt><dd>How much haze, smoke or dust is in the air, measured by how much it dims sunlight. No unit. About 0.1 is clear; above 0.4 is very hazy.</dd></div>
+      <div><dt>Groundwater percentile</dt><dd>How full the groundwater is compared with its own history: 0 is the driest on record, 100 the wettest.</dd></div>
+      <div><dt>Similar (analog) place</dt><dd>A different place whose trends look alike. Useful for learning, not for exact forecasts.</dd></div>
+      <div><dt>Scenario</dt><dd>A "what could happen" story based on evidence. Not a forecast.</dd></div>
+    </dl>
+  </div>
+</main>
+<footer>Built for NASA Space Apps Challenge 2026, "Be An Earth System Trend Detective!". Data: NASA Giovanni (GES DISC). NASA does not endorse this project. Region boxes are approximate. The lists of common drivers are general background, not results of this tool. Coastlines: Natural Earth.</footer>
+</body>
+</html>

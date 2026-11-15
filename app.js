@@ -187,7 +187,8 @@ function render(){
     const odds = a.p < .001 ? 'less than 1 time in 1,000' : a.p < .01 ? 'less than 1 time in 100' : `about ${Math.round(a.p * 100)} times in 100`;
     $('verdict').innerHTML = `
       <div class="verdict">
-        <h3>${a.sig ? `Yes. ${V.short} is ${a.up ? 'rising' : 'falling'} here, and it is unlikely to be chance.` : a.likely ? `Likely ${a.up ? 'rising' : 'falling'}, but not confirmed.` : `Not proven. ${V.short} shows no clear trend here.`}</h3>
+        <h3>${a.sig && a.mk.p >= .05 ? `${V.short} is ${a.up ? 'rising' : 'falling'} here, but only one of our two tests confirms it.`   /* same condition as the Mann-Kendall note below, so headline and note agree */
+          : a.sig ? `Yes. ${V.short} is ${a.up ? 'rising' : 'falling'} here, and it is unlikely to be chance.` : a.likely ? `Likely ${a.up ? 'rising' : 'falling'}, but not confirmed.` : `Not proven. ${V.short} shows no clear trend here.`}</h3>
         <p>${a.likely
           ? `From ${a.x[0]} to ${a.x[a.n - 1]} the ${S.long} average ${a.up ? 'rose' : 'fell'} by ${fmt(Math.abs(total), V.dp)}${unit(v)} in total, and the ordinary test calls that significant (p ${pTxt(a.p0)}). But here each year resembles the year before, so ${a.n} years hold less evidence than they seem to. Our stricter test, which keeps false alarms below 5%, cannot rule out chance yet.`
           : a.sig

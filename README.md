@@ -50,6 +50,8 @@ A static website. There is no server: the browser does every calculation.
 | `styles.css` | Styles |
 | `stats.js` | Region and measurement definitions and all statistics |
 | `app.js` | Loads the data; menus, globe, chart and answer panels |
+| `layout.css`, `layout.js` | Page layout: the answer beside the Earth, tabs, start-year slider, downloads |
+| `about.html` | About the project and a glossary |
 | `data/regions.json` | The 49 NASA series, packed into one file |
 | `how_it_works.html` | Explanation of the data and methods |
 | `giovanni_to_regions.py` | Turns the Giovanni CSV files into `data/regions.json` |
